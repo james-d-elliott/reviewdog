@@ -237,14 +237,21 @@ func (ch *Checker) toCheckRunAnnotation(c *filter.FilteredDiagnostic) *github.Ch
 	if endLine == 0 {
 		endLine = startLine
 	}
+
+	message := c.Diagnostic.GetMessage()
+	if message == "" {
+		message = "Suggested Changes:"
+	}
+
 	a := &github.CheckRunAnnotation{
 		Path:            github.String(loc.GetPath()),
 		StartLine:       github.Int(startLine),
 		EndLine:         github.Int(endLine),
 		AnnotationLevel: github.String(ch.annotationLevel(c.Diagnostic.Severity)),
-		Message:         github.String(c.Diagnostic.GetMessage()),
+		Message:         github.String(message),
 		Title:           github.String(ch.buildTitle(c)),
 	}
+
 	// Annotations only support start_column and end_column on the same line.
 	if startLine == endLine {
 		if s, e := loc.GetRange().GetStart().GetColumn(), loc.GetRange().GetEnd().GetColumn(); s != 0 && e != 0 {
