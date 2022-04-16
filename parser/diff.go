@@ -46,6 +46,7 @@ func (d dstate) build(path string, currentLine int) *rdf.Diagnostic {
 		Location:       &rdf.Location{Path: path, Range: drange},
 		Suggestions:    []*rdf.Suggestion{{Range: drange, Text: text}},
 		OriginalOutput: strings.Join(d.originalLines, "\n"),
+		Message:        "Suggested Changes",
 	}
 }
 
